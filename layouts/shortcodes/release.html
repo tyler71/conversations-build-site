@@ -1,0 +1,15 @@
+{{- $repo := "tyler71/conversations-build-site" -}}
+{{- $count := default 10 (.Get "count") -}}
+
+{{- $urlPre := "https://api.github.com/repos/" -}}
+{{- $type := "/releases" -}}
+{{- $postRequest := getJSON $urlPre $repo $type -}}
+
+{{- range first $count $postRequest -}}
+    {{- $name := .name -}}
+    {{- $assetsRequest := getJSON .assets_url -}}
+    {{ range first 1 $assetsRequest }}
+        <a href="{{ .browser_download_url }}">{{ $name }}</a>
+        {{ if gt $count 1 }}<br>{{ end }}
+    {{ end }}
+{{- end -}}

@@ -1,0 +1,59 @@
+name: build apk
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  
+jobs:
+    build-app:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Build Conv Auto
+        uses: docker://tyler71/convauto:latest
+        with:
+          args: "jingle"
+
+      - name: Find Universal apk
+        id: apk-location
+        run: |
+          echo "::set-output name=universal-apk::$(find -type f -iname '*-universal-*.apk' -print -quit)"
+          echo "::set-output name=apk-md5-sum::$(md5sum ${{ steps.apk-location.outputs.universal-apk }} | cut -d' ' -f1)"
+
+      - name: Get current date
+        id: current-date
+        run: |
+          echo "::set-output name=date-slug::$(date '+%m-%d-%Y')"
+          echo "::set-output name=date-long::$(date '+%B %d, %Y')"          
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: conv_${{ steps.apk-location.outputs.apk-md5-sum }}
+          release_name: ${{ steps.current-date.outputs.date-long }} Snapshot
+          draft: false
+          prerelease: false
+
+      - name: Upload Compiled Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_AUTH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ steps.apk-location.outputs.universal-apk }}
+          asset_name: conv-auto-V-${{ steps.current-date.outputs.date-slug }}.apk
+          asset_content_type: application/apk
+
+      - name: Rollback Release # if tag already exists
+        if: failure()
+        uses: author/action-rollback@stable
+        with:
+          # Using a known release ID
+          id: ${{ steps.create_release }}
+          # Using a tag name
+          tag: conv_${{ steps.apk-location.outputs.apk-md5-sum }}
+          # Always delete the tag, even if a release is not associated with it.
+          always_delete_tag: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
