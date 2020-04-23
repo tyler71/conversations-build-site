@@ -32,18 +32,24 @@ jobs:
         with:
           tag_name: conv_${{ steps.apk-location.outputs.apk-md5-sum }}
           release_name: ${{ steps.current-date.outputs.date-long }} Snapshot
-          draft: false
+          draft: true
           prerelease: false
 
       - name: Upload Compiled Asset
         uses: actions/upload-release-asset@v1.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ${{ steps.apk-location.outputs.universal-apk }}
           asset_name: conv-auto-V-${{ steps.current-date.outputs.date-slug }}.apk
           asset_content_type: application/apk
+
+      - uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_AUTH_TOKEN }} # Auth token will let gh-pages workflow trigger
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}
 
       - name: Rollback Release # if tag already exists
         if: failure()
