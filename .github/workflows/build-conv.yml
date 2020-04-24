@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: conv_${{ steps.apk-location.outputs.apk-md5-sum }}
-          release_name: ${{ steps.current-date.outputs.date-long }} Snapshot
+          release_name: Conversations - ${{ steps.current-date.outputs.date-long }}
           draft: true
           prerelease: false
 
