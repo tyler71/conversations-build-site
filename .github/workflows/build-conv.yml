@@ -10,7 +10,7 @@ jobs:
       - name: Build Conv Auto
         uses: docker://tyler71/convauto:latest
         with:
-          args: "jingle"
+          args: "master"
 
       - name: Find Universal apk
         id: apk-location
