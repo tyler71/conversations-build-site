@@ -1,4 +1,4 @@
-To compile locally, you can run this command, expect about a 5.26GB size image
+To compile locally, you can run this command, expect about a 985MB size image
 
 ```
 docker container run --rm -v $(pwd):/output tyler71/convauto master

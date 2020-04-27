@@ -16,7 +16,7 @@ jobs:
         id: apk-location
         run: |
           echo "::set-output name=universal-apk::$(find -type f -iname '*-universal-*.apk' -print -quit)"
-          echo "::set-output name=apk-md5-sum::$(md5sum ${{ steps.apk-location.outputs.universal-apk }} | cut -d' ' -f1)"
+          echo "::set-output name=apk-md5-sum::$(md5sum $(find -type f -iname '*-universal-*.apk' -print -quit) | cut -d' ' -f1)"
 
       - name: Get current date
         id: current-date
