@@ -1,5 +1,7 @@
 name: build apk
 on:
+  push:
+    branches: master
   schedule:
     - cron: '0 0 * * *'
   
@@ -11,12 +13,15 @@ jobs:
         uses: docker://tyler71/convauto:latest
         with:
           args: "master"
+          
+      - run: find .
 
       - name: Find Universal apk
         id: apk-location
         run: |
           echo "::set-output name=universal-apk::$(find -type f -iname '*-universal-*.apk' -print -quit)"
           echo "::set-output name=apk-md5-sum::$(md5sum $(find -type f -iname '*-universal-*.apk' -print -quit) | cut -d' ' -f1)"
+          echo "::set-output name=apk-commit::echo $(find -type f -iname '*-universal-*.apk' -print -quit)" | cut -d'-' -f2
 
       - name: Get current date
         id: current-date
@@ -31,7 +36,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: conv_${{ steps.apk-location.outputs.apk-md5-sum }}
-          release_name: Conversations - ${{ steps.current-date.outputs.date-long }}
+          release_name: Conversations - ${{ steps.current-date.outputs.date-long }} [${{ steps.apk-location.outputs.apk-commit }}]
           draft: true
           prerelease: false
 
