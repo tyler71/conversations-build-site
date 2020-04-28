@@ -19,9 +19,9 @@ jobs:
       - name: Find Universal apk
         id: apk-location
         run: |
-          echo "::set-output name=universal-apk::"$(find -type f -iname '*-universal-*.apk' -print -quit)"
-          echo "::set-output name=apk-commit::"$(git -C ./Conversations rev-parse --short --verify HEAD)"
-          echo "::set-output name=apk-commit-msg::"$(git -C ./Conversations log -1 --pretty='%B')"
+          echo "::set-output name=universal-apk::$(find -type f -iname '*-universal-*.apk' -print -quit)"
+          echo "::set-output name=apk-commit::$(git -C ./Conversations rev-parse --short --verify HEAD)"
+          echo "::set-output name=apk-commit-msg::$(git -C ./Conversations log -1 --pretty='%B')"
 
       - name: Get current date
         id: current-date
