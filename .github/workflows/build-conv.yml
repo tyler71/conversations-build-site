@@ -1,7 +1,5 @@
 name: build apk
 on:
-  push:
-    branches: master
   schedule:
     - cron: '0 0 * * *'
   
@@ -20,8 +18,8 @@ jobs:
         id: apk-location
         run: |
           echo "::set-output name=universal-apk::$(find -type f -iname '*-universal-*.apk' -print -quit)"
-          echo "::set-output name=apk-md5-sum::$(md5sum $(find -type f -iname '*-universal-*.apk' -print -quit) | cut -d' ' -f1)"
-          echo "::set-output name=apk-commit::echo $(find -type f -iname '*-universal-*.apk' -print -quit)" | cut -d'-' -f2
+          echo "::set-output name=apk-commit::$(git -C ./Conversations rev-parse --short --verify HEAD)"
+          echo "::set-output name=apk-commit-msg::$(git -C ./Conversations log -1 --pretty='%B')"
 
       - name: Get current date
         id: current-date
@@ -35,8 +33,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: conv_${{ steps.apk-location.outputs.apk-md5-sum }}
+          tag_name: conv_${{ steps.apk-location.outputs.apk-commit }}
           release_name: Conversations - ${{ steps.current-date.outputs.date-long }} [${{ steps.apk-location.outputs.apk-commit }}]
+          body: ${{ steps.apk-location.outputs.apk-commit-msg }}
           draft: true
           prerelease: false
 
@@ -63,7 +62,7 @@ jobs:
           # Using a known release ID
           id: ${{ steps.create_release }}
           # Using a tag name
-          tag: conv_${{ steps.apk-location.outputs.apk-md5-sum }}
+          tag: conv_${{ steps.apk-location.outputs.apk-commit }}
           # Always delete the tag, even if a release is not associated with it.
           always_delete_tag: true
         env:
