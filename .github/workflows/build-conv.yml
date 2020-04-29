@@ -74,7 +74,7 @@ jobs:
         uses: author/action-rollback@stable
         with:
           # Using a known release ID
-          id: ${{ steps.create_release }}
+          id: ${{ steps.create_release.id }}
           # Using a tag name
           tag: conv_${{ steps.apk-location.outputs.apk-commit }}
           # Always delete the tag, even if a release is not associated with it.
