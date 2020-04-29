@@ -1,7 +1,5 @@
 name: build apk
 on:
-  push:
-    branches: master
   schedule:
     - cron: '0 0 * * *'
   
@@ -14,8 +12,9 @@ jobs:
       - name: Get version id
         id: version
         run: |
-          echo "::set-output name=conv-auto-version::$(cat docker/CONVAUTO_VERSION)"
           bash -c "echo -n $(($(cat docker/CONVAUTO_VERSION) + 1)) > docker/CONVAUTO_VERSION"
+          echo "::set-output name=conv-auto-version::$(cat docker/CONVAUTO_VERSION)"
+
 
       - name: Build Conv Auto
         uses: docker://tyler71/convauto:latest
