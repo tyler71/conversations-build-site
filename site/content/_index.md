@@ -7,4 +7,4 @@ title: Conversations Build
 
 ## Recent
 
-{{< release count=5 repo="tyler71/conversations-build-site" table="true" >}}
+{{< release count=3 repo="tyler71/conversations-build-site" table="true" >}}
