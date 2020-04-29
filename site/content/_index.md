@@ -1,10 +1,18 @@
 ---
 title: Conversations - Auto Built
+description: Unofficial debug versions
 ---
-##### Unoffical debug versions
+**Unoffical debug versions**
 
 ## Latest
 {{< release count=1 repo="tyler71/conversations-build-site"  >}}
+
+
+Build locally with one command
+
+```
+docker run --rm -v $(pwd):/output tyler71/convauto
+```
 
 ## Recent
 
