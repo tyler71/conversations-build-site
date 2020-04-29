@@ -10,6 +10,9 @@ if [ -z ${CONV_NAME} ]; then CONV_NAME="ConvAuto"; fi
 # CONV_ID=convauto
 if [ -z ${CONV_ID} ]; then CONV_ID="convauto"; fi
 
+## Version Id
+if [ -z ${CONV_VERSION} ]; then CONV_VERSION="999999"; fi
+
 git clone https://github.com/siacs/Conversations
 cd Conversations
 git checkout "$commit"
@@ -21,6 +24,7 @@ cp /libwebrtc-m81.aar libs/libwebrtc-m81.aar
 sed -i 's/applicationId "eu.siacs.conversations"/applicationId "'${CONV_ID}'.conversations"/' build.gradle 
 sed -i 's/"app_name", "Conversations"/"app_name", "Conversations '${CONV_NAME}'"/' build.gradle
 sed -i 's/versionName ".*"/versionName "'$appVersion'"/' build.gradle
+sed -i 's/versionCode \d+/versionCode '"$CONV_VERSION"'/' build.gradle
 
 ./gradlew assembleConversationsFreeSystemDebug
 

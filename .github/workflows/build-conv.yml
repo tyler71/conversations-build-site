@@ -1,5 +1,7 @@
 name: build apk
 on:
+  push:
+    branches: master
   schedule:
     - cron: '0 0 * * *'
   
@@ -7,8 +9,19 @@ jobs:
     build-app:
       runs-on: ubuntu-latest
       steps:
+      - uses: actions/checkout@v2
+        
+      - name: Get version id
+        id: version
+        run: |
+          echo "::set-output name=conv-auto-version::$(cat docker/CONVAUTO_VERSION)"
+
       - name: Build Conv Auto
         uses: docker://tyler71/convauto:latest
+        env:
+          CONV_NAME: ConvAuto
+          CONV_ID: convauto
+          CONV_VERSION: ${{ steps.version.outputs.conv-auto-version }}
         with:
           args: "master"
           
