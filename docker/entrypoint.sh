@@ -24,7 +24,7 @@ cp /libwebrtc-m81.aar libs/libwebrtc-m81.aar
 sed -i 's/applicationId "eu.siacs.conversations"/applicationId "'${CONV_ID}'.conversations"/' build.gradle 
 sed -i 's/"app_name", "Conversations"/"app_name", "Conversations '${CONV_NAME}'"/' build.gradle
 sed -i 's/versionName ".*"/versionName "'$appVersion'"/' build.gradle
-sed -i 's/versionCode \d+/versionCode '"$CONV_VERSION"'/' build.gradle
+sed -i 's/versionCode [[:digit:]]\+/versionCode '"$CONV_VERSION"'/' build.gradle
 
 ./gradlew assembleConversationsFreeSystemDebug
 
