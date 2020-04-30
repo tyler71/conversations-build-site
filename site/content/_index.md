@@ -8,7 +8,7 @@ description: Unofficial debug versions
 {{< release count=1 repo="tyler71/conversations-build-site"  >}}
 
 
-Build locally with one command
+Build locally with docker
 
 ```
 docker run --rm -v $(pwd):/output tyler71/convauto
