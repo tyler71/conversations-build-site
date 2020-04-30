@@ -13,7 +13,7 @@ if [ -z ${CONV_ID} ]; then CONV_ID="convauto"; fi
 ## Version Id
 if [ -z ${CONV_VERSION} ]; then CONV_VERSION="999999"; fi
 
-git clone https://github.com/siacs/Conversations
+git clone https://github.com/inputmice/Conversations
 cd Conversations
 git checkout "$commit"
 appVersion="$(git rev-parse --short --verify HEAD)"
