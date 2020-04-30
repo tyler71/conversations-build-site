@@ -66,6 +66,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_AUTH_TOKEN }} # Auth token will let gh-pages workflow trigger
         with:
+          continue_on_error: true
           release_id: ${{ steps.create_release.outputs.id }}
 
       - name: Rollback Release # if tag already exists
