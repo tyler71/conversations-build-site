@@ -12,8 +12,8 @@ jobs:
       - name: Get version id
         id: version
         run: |
-          bash -c "echo -n $(($(cat docker/CONVAUTO_VERSION) + 1)) > docker/CONVAUTO_VERSION"
-          echo "::set-output name=conv-auto-version::$(cat docker/CONVAUTO_VERSION)"
+          bash -c "echo -n $(($(cat .github/CONVAUTO_VERSION) + 1)) > .github/CONVAUTO_VERSION"
+          echo "::set-output name=conv-auto-version::$(cat .github/CONVAUTO_VERSION)"
 
 
       - name: Build Conv Auto
@@ -86,6 +86,6 @@ jobs:
         if: success()
         uses: alexesprit/action-update-file@master
         with:
-          file-path: docker/CONVAUTO_VERSION
+          file-path: .github/CONVAUTO_VERSION
           commit-msg: Increment debug version
           github-token: ${{ secrets.GITHUB_TOKEN }}
