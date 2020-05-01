@@ -1,0 +1,26 @@
+name: check if Conversations has been updated
+on:
+  schedule:
+    - cron: '0 * * * *'
+  
+jobs:
+    build-app:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+        
+      - name: Get version id and commit
+        id: version
+        run: |
+          echo "::set-output name=conv-auto-commit::$(cat .github/CONVAUTO_COMMIT)"
+      - name: Get most recent Conversations commit
+        id: commit
+        uses: actions/checkout@v2
+        with:
+          repository: 'iNPUTmice/Conversations'
+          path: ./conv-commit-check
+          
+      - name: Check if new update
+        if: $(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}
+        run: |
+          curl -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${{ secrets.PERSONAL_AUTH_TOKEN }}" --request POST --data '{"event_type": "build-apk"}' https://api.github.com/repos/tyler71/conversations-build-site/dispatches
