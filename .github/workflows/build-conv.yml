@@ -11,14 +11,26 @@ jobs:
       steps:
       - uses: actions/checkout@v2
         
-      - name: Get version id
+      - name: Get version id and commit
         id: version
         run: |
           bash -c "echo -n $(($(cat .github/CONVAUTO_VERSION) + 1)) > .github/CONVAUTO_VERSION"
           echo "::set-output name=conv-auto-version::$(cat .github/CONVAUTO_VERSION)"
+          echo "::set-output name=conv-auto-commit::$(cat .github/CONVAUTO_COMMIT)"
 
+      - name: Get most recent Conversations commit
+        id: commit
+        uses: actions/checkout@v2
+        with:
+          repository: 'iNPUTmice/Conversations'
+          path: ./conv-commit-check
+
+      - name: test
+        run: |
+          echo "$(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}"
 
       - name: Build Conv Auto
+        if: $(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}
         uses: docker://tyler71/convauto:latest
         env:
           CONV_NAME: ConvAuto
@@ -26,8 +38,6 @@ jobs:
           CONV_VERSION: ${{ steps.version.outputs.conv-auto-version }}
         with:
           args: "master"
-          
-      - run: find .
 
       - name: Find Universal apk
         id: apk-location
@@ -89,5 +99,13 @@ jobs:
         uses: alexesprit/action-update-file@master
         with:
           file-path: .github/CONVAUTO_VERSION
+          commit-msg: Increment debug version
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update version commit
+        if: success()
+        uses: alexesprit/action-update-file@master
+        with:
+          file-path: .github/CONVAUTO_COMMIT
           commit-msg: Increment debug version
           github-token: ${{ secrets.GITHUB_TOKEN }}
