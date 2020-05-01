@@ -26,7 +26,9 @@ sed -i 's/"app_name", "Conversations"/"app_name", "Conversations '${CONV_NAME}'"
 sed -i 's/versionName ".*"/versionName "'$appVersion'"/' build.gradle
 sed -i 's/versionCode [[:digit:]]\+/versionCode '"$CONV_VERSION"'/' build.gradle
 
-./gradlew assembleConversationsFreeSystemDebug
+export GRADLE_OPTS="-Xmx4g -Dorg.gradle.daemon=false"
+./gradlew clean
+./gradlew clean assembleConversationsFreeSystemRelease
 
 find -type f -iname '*-universal-*.apk' -exec cp {} /output \;
 chmod a+rw -R /output
