@@ -1,5 +1,7 @@
 name: build apk
 on:
+  repository_dispatch:
+    types: build-apk
   schedule:
     - cron: '0 0 * * *'
   
