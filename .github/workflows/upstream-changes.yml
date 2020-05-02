@@ -18,7 +18,9 @@ jobs:
           repository: 'iNPUTmice/Conversations'
           path: ./conv-commit-check
 
-      - run: find .
+      - run: |
+          echo conversations commit: $(git -C ./conv-commit-check rev-parse --short --verify HEAD)
+          find .
 
       - name: Get version id and commit
         id: version
