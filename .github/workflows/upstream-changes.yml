@@ -20,6 +20,9 @@ jobs:
           repository: 'iNPUTmice/Conversations'
           path: ./conv-commit-check
           
+      - name: log of comparision
+        run: echo "$(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}"
+      
       - name: Check if new update
         if: $(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}
         run: |
