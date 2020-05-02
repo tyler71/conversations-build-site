@@ -20,7 +20,7 @@ jobs:
 
       - run: |
           echo conversations commit: $(git -C ./conv-commit-check rev-parse --short --verify HEAD)
-          echo local commit: $(cat .github/CONVAUTO_COMMIT)
+          echo local commit: $(cat ${{ RUNNER_WORKSPACE }}/.github/CONVAUTO_COMMIT)
           find .
 
 
