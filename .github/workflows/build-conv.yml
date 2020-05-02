@@ -14,10 +14,10 @@ jobs:
       - name: Get version id and commit
         id: version
         run: |
-          bash -c "echo -n $(($(cat .github/CONVAUTO_VERSION) + 1)) > .github/CONVAUTO_VERSION"
+          bash -c "echo -n $(($(cat .github/CONVAUTO_VERSION) + 1))" > .github/CONVAUTO_VERSION
           echo "::set-output name=conv-auto-version::$(cat ./conv-build-site/.github/CONVAUTO_VERSION)"
           echo "::set-output name=conv-auto-commit::$(cat ./conv-build-site/.github/CONVAUTO_COMMIT)"
-          bash -c "echo $(git -C conv-commit-check rev-parse --short --verify HEAD) > .github/CONVAUTO_COMMIT"
+          bash -c "echo $(git -C conv-commit-check rev-parse --short --verify HEAD)" > .github/CONVAUTO_COMMIT
 
       - name: Get most recent Conversations commit
         id: commit
