@@ -10,6 +10,8 @@ jobs:
       runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v2
+        with:
+          path: ./conv-build-site
         
       - name: Get most recent Conversations commit
         id: commit
@@ -20,15 +22,13 @@ jobs:
 
       - run: |
           echo conversations commit: $(git -C ./conv-commit-check rev-parse --short --verify HEAD)
-          echo local commit: $(cat $RUNNER_WORKSPACE/.github/CONVAUTO_COMMIT)
+          echo local commit: $(cat $RUNNER_WORKSPACE/conv-build-site/.github/CONVAUTO_COMMIT)
           find $RUNNER_WORKSPACE
-
-
 
       - name: Get version id and commit
         id: version
         run: |
-          echo "::set-output name=conv-auto-commit::$(cat .github/CONVAUTO_COMMIT)"
+          echo "::set-output name=conv-auto-commit::$(cat $RUNNER_WORKSPACE/conv-build-site/.github/CONVAUTO_COMMIT)"
           echo "::set-output name=conversations-commit::$(git -C ./conv-commit-check rev-parse --short --verify HEAD)"
 
       - name: log of comparision
