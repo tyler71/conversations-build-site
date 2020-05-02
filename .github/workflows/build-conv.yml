@@ -15,6 +15,7 @@ jobs:
           bash -c "echo -n $(($(cat .github/CONVAUTO_VERSION) + 1)) > .github/CONVAUTO_VERSION"
           echo "::set-output name=conv-auto-version::$(cat .github/CONVAUTO_VERSION)"
           echo "::set-output name=conv-auto-commit::$(cat .github/CONVAUTO_COMMIT)"
+          bash -c "echo -n $(git -C conv-commit-check rev-parse --short --verify HEAD) > .github/CONVAUTO_COMMIT"
 
       - name: Get most recent Conversations commit
         id: commit
