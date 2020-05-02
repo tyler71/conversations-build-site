@@ -24,6 +24,6 @@ jobs:
         run: echo "$(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}"
       
       - name: Check if new update
-        if: $(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}
+        if: ${{ "$(git -C conv-commit-check rev-parse --short --verify HEAD)" != "${{ steps.version.outputs.conv-auto-commit }}" }}
         run: |
           curl -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${{ secrets.PERSONAL_AUTH_TOKEN }}" --request POST --data '{"event_type": "build-apk"}' https://api.github.com/repos/tyler71/conversations-build-site/dispatches
