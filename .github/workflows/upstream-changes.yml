@@ -22,6 +22,8 @@ jobs:
           echo conversations commit: $(git -C ./conv-commit-check rev-parse --short --verify HEAD)
           find .
 
+      - uses: 98w/action-debugger@v0.1
+
       - name: Get version id and commit
         id: version
         run: |
