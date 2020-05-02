@@ -35,6 +35,6 @@ jobs:
       - uses: 98w/action-debugger@v0.1
       
       - name: Check if new update
-        if: ${{ ! contains(${{ steps.version.outputs.conversations-commit }}, ${{ steps.version.outputs.conv-auto-commit }} }}
+        if: ${{ ! contains(steps.version.outputs.conversations-commit, steps.version.outputs.conv-auto-commit }}
         run: |
           curl -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${{ secrets.PERSONAL_AUTH_TOKEN }}" --request POST --data '{"event_type": "build-apk"}' https://api.github.com/repos/tyler71/conversations-build-site/dispatches
