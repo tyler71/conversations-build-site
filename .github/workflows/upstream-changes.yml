@@ -24,7 +24,7 @@ jobs:
       - run: |
           echo conversations commit: $(git -C ./conv-commit-check rev-parse --short --verify HEAD)
           echo local commit: $(cat ./conv-build-site/.github/CONVAUTO_COMMIT)
-          find $RUNNER_WORKSPACE
+          find -type f -name CONVAUTO_COMMIT
 
       - name: Get version id and commit
         id: version
