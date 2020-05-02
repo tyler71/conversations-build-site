@@ -19,8 +19,9 @@ jobs:
       - name: Get version id and commit
         id: version
         run: |
+          find .
           echo "::set-output name=conv-auto-commit::$(cat .github/CONVAUTO_COMMIT)"
-          echo "::set-output name=conversations-commit::$(git -C conv-commit-check rev-parse --short --verify HEAD)"
+          echo "::set-output name=conversations-commit::$(git -C ./conv-commit-check rev-parse --short --verify HEAD)"
 
       - name: log of comparision
         run: echo "${{ steps.version.outputs.conversations-commit }} != ${{ steps.version.outputs.conv-auto-commit }}"
