@@ -33,7 +33,7 @@ jobs:
           echo "$(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}"
 
       - name: Build Conv Auto
-        if: $(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}
+        if: $(( contains($(git -C conv-commit-check rev-parse --short --verify HEAD), ${{ steps.version.outputs.conv-auto-commit }})
         uses: docker://tyler71/convauto:latest
         env:
           CONV_NAME: ConvAuto
