@@ -20,9 +20,10 @@ jobs:
 
       - run: |
           echo conversations commit: $(git -C ./conv-commit-check rev-parse --short --verify HEAD)
+          echo local commit: $(cat .github/CONVAUTO_COMMIT)
           find .
 
-      - uses: 98w/action-debugger@v0.1
+
 
       - name: Get version id and commit
         id: version
@@ -32,6 +33,8 @@ jobs:
 
       - name: log of comparision
         run: echo "${{ steps.version.outputs.conversations-commit }} != ${{ steps.version.outputs.conv-auto-commit }}"
+      
+      - uses: 98w/action-debugger@v0.1
       
       - name: Check if new update
         if: ${{ steps.version.outputs.conversations-commit }} != ${{ steps.version.outputs.conv-auto-commit }}
