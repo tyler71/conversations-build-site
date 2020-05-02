@@ -1,6 +1,7 @@
 name: check if Conversations has been updated
 on:
   push:
+    paths: site
     branches: master
   schedule:
     - cron: '0 * * * *'
