@@ -14,10 +14,10 @@ jobs:
       - name: Get version id and commit
         id: version
         run: |
-          bash -c "echo -n $(($(cat .github/CONVAUTO_VERSION) + 1)) > cat ./conv-build-site/.github/CONVAUTO_VERSION"
+          bash -c "echo -n $(($(cat .github/CONVAUTO_VERSION) + 1)) > ./conv-build-site/.github/CONVAUTO_VERSION"
           echo "::set-output name=conv-auto-version::$(cat ./conv-build-site/.github/CONVAUTO_VERSION)"
           echo "::set-output name=conv-auto-commit::$(cat ./conv-build-site/.github/CONVAUTO_COMMIT)"
-          bash -c "echo $(git -C conv-commit-check rev-parse --short --verify HEAD) > cat ./conv-build-site/.github/CONVAUTO_COMMIT"
+          bash -c "echo $(git -C conv-commit-check rev-parse --short --verify HEAD) > ./conv-build-site/.github/CONVAUTO_COMMIT"
 
       - name: Get most recent Conversations commit
         id: commit
@@ -99,7 +99,7 @@ jobs:
         if: success()
         uses: alexesprit/action-update-file@master
         with:
-          file-path: cat ./conv-build-site/.github/CONVAUTO_VERSION
+          file-path: ./conv-build-site/.github/CONVAUTO_VERSION
           commit-msg: Increment debug version
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -107,6 +107,6 @@ jobs:
         if: success()
         uses: alexesprit/action-update-file@master
         with:
-          file-path: cat ./conv-build-site/.github/CONVAUTO_COMMIT
+          file-path: ./conv-build-site/.github/CONVAUTO_COMMIT
           commit-msg: Increment debug version
           github-token: ${{ secrets.GITHUB_TOKEN }}
