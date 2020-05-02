@@ -17,11 +17,12 @@ jobs:
         with:
           repository: 'iNPUTmice/Conversations'
           path: ./conv-commit-check
-        
+
+      - run: find .
+
       - name: Get version id and commit
         id: version
         run: |
-          find .
           echo "::set-output name=conv-auto-commit::$(cat .github/CONVAUTO_COMMIT)"
           echo "::set-output name=conversations-commit::$(git -C ./conv-commit-check rev-parse --short --verify HEAD)"
 
