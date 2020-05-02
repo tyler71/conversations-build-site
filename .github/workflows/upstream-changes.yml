@@ -1,0 +1,40 @@
+name: check if Conversations has been updated
+on:
+  schedule:
+    - cron: '0 * * * *'
+  
+jobs:
+    build-app:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ./conv-build-site
+        
+      - name: Get most recent Conversations commit
+        id: commit
+        uses: actions/checkout@v2
+        with:
+          repository: 'iNPUTmice/Conversations'
+          path: ./conv-commit-check
+
+      - run: |
+          echo conversations commit: $(git -C ./conv-commit-check rev-parse --short --verify HEAD)
+          echo local commit: $(cat ./conv-build-site/.github/CONVAUTO_COMMIT)
+          find -type f -name CONVAUTO_COMMIT
+
+      - name: Get version id and commit
+        id: version
+        run: |
+          echo "::set-output name=conv-auto-commit::$(cat ./conv-build-site/.github/CONVAUTO_COMMIT)"
+          echo "::set-output name=conversations-commit::$(git -C ./conv-commit-check rev-parse --short --verify HEAD)"
+
+      - name: log of comparision
+        run: echo "${{ steps.version.outputs.conversations-commit }} != ${{ steps.version.outputs.conv-auto-commit }}"
+      
+      - uses: 98w/action-debugger@v0.1
+      
+      - name: Check if new update
+        if: ${{ steps.version.outputs.conversations-commit }} != ${{ steps.version.outputs.conv-auto-commit }}
+        run: |
+          curl -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${{ secrets.PERSONAL_AUTH_TOKEN }}" --request POST --data '{"event_type": "build-apk"}' https://api.github.com/repos/tyler71/conversations-build-site/dispatches
