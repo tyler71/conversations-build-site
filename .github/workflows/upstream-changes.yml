@@ -1,4 +1,4 @@
-name: check if Conversations has been updated
+name: check for updated app
 on:
   repository_dispatch:
     types: upstream-changes
