@@ -19,8 +19,8 @@
 <table class="table table-hover table-striped">
   <thead>
     <tr>
-      <th class="text-left" scope="col">Release</th>
-      <th scope="col">Git Msg</th>
+      <th class="text-left" scope="col">Release Download</th>
+      <th scope="col">Git Message</th>
     </tr>
   </thead>
   <tbody>
@@ -28,7 +28,7 @@
         {{- $name := .name -}}
         {{- $assetsRequest := getJSON .assets_url -}}
         {{- $commitText := .body -}}
-        {{- $commit := .tag_name -}}
+        {{- $commit := replaceRE `.*?_(\w+)` `$1` (.tag_name) -}}
         {{- $downloadUrl := "" -}}
         {{- $downloadFileName := "" -}}
         {{- range first 1 $assetsRequest -}}
@@ -37,7 +37,7 @@
         {{- end -}}
     <tr>
       <td class="text-left"><a href="{{ $downloadUrl }}">{{ $name }}</a></td>
-      <td>{{ $commitText }}</td>
+      <td><a href="https://github.com/iNPUTmice/Conversations/commit/{{ $commit }}">{{ $commitText }}</a></td>
     </tr>
     
     {{- end -}}
