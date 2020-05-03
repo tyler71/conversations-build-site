@@ -20,22 +20,12 @@ jobs:
           repository: 'iNPUTmice/Conversations'
           path: ./conv-commit-check
 
-      - run: |
-          echo conversations commit: $(git -C ./conv-commit-check rev-parse --short --verify HEAD)
-          echo local commit: $(cat ./conv-build-site/.github/CONVAUTO_COMMIT)
-          find -type f -name CONVAUTO_COMMIT
-
       - name: Get version id and commit
         id: version
         run: |
           echo "::set-output name=conv-auto-commit::$(cat ./conv-build-site/.github/CONVAUTO_COMMIT)"
           echo "::set-output name=conversations-commit::$(git -C ./conv-commit-check rev-parse --short --verify HEAD)"
 
-      - name: log of comparision
-        run: echo "${{ steps.version.outputs.conversations-commit }} != ${{ steps.version.outputs.conv-auto-commit }}"
-      
-      - uses: 98w/action-debugger@v0.1
-      
       - name: Check if new update
         if: contains(steps.version.outputs.conversations-commit, steps.version.outputs.conv-auto-commit) != true
         run: |
