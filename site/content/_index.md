@@ -6,7 +6,8 @@ description: Unofficial debug versions
 
 
 ## Latest
-![build apk](https://github.com/tyler71/conversations-build-site/workflows/build%20apk/badge.svg?event=repository_dispatch)  
+![build apk](https://github.com/tyler71/conversations-build-site/workflows/build%20apk/badge.svg?event=repository_dispatch)
+![Conversations Travis](https://travis-ci.org/iNPUTmice/Conversations.svg?branch=master)  
 {{< release count=1 repo="tyler71/conversations-build-site"  >}}
 
 
