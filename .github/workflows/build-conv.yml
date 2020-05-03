@@ -92,12 +92,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update version commit and count
+      - name: Update version count
         if: success()
         uses: alexesprit/action-update-file@master
         with:
-          file-path: |
-            .github/CONVAUTO_COMMIT
-            .github/CONVAUTO_VERSION
-          commit-msg: Update apk to ${{ steps.apk-location.outputs.apk-commit }} - ${{ steps.version.outputs.conv-auto-version }}
+          file-path: .github/CONVAUTO_VERSION
+          commit-msg: Increment debug version to ${{ steps.version.outputs.conv-auto-version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update version commit
+        if: success()
+        uses: alexesprit/action-update-file@master
+        with:
+          file-path: .github/CONVAUTO_COMMIT
+          commit-msg: Update apk to ${{ steps.apk-location.outputs.apk-commit }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
