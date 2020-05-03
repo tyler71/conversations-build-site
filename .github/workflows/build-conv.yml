@@ -8,16 +8,6 @@ jobs:
       runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v2
-        with:
-          path: ./conv-build-site
-        
-      - name: Get version id and commit
-        id: version
-        run: |
-          bash -c "echo -n $(($(cat .github/CONVAUTO_VERSION) + 1)) > .github/CONVAUTO_VERSION"
-          echo "::set-output name=conv-auto-version::$(cat ./conv-build-site/.github/CONVAUTO_VERSION)"
-          echo "::set-output name=conv-auto-commit::$(cat ./conv-build-site/.github/CONVAUTO_COMMIT)"
-          bash -c "echo $(git -C conv-commit-check rev-parse --short --verify HEAD) > .github/CONVAUTO_COMMIT"
 
       - name: Get most recent Conversations commit
         id: commit
@@ -26,12 +16,16 @@ jobs:
           repository: 'iNPUTmice/Conversations'
           path: ./conv-commit-check
 
-      - name: test
+      - name: Get version id and commit; write new values (not saved unless workflow is a success)
+        id: version
         run: |
-          echo "$(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}"
+          bash -c "echo -n $(($(cat .github/CONVAUTO_VERSION) + 1))" > .github/CONVAUTO_VERSION
+          echo "::set-output name=conv-auto-version::$(cat .github/CONVAUTO_VERSION)"
+          echo "::set-output name=conv-auto-commit::$(cat .github/CONVAUTO_COMMIT)"
+          bash -c "echo $(git -C conv-commit-check rev-parse --short --verify HEAD)" > .github/CONVAUTO_COMMIT
+          echo "::set-output name=date-long::$(date '+%B %d, %Y')"     
 
       - name: Build Conv Auto
-        if: $(git -C conv-commit-check rev-parse --short --verify HEAD) != ${{ steps.version.outputs.conv-auto-commit }}
         uses: docker://tyler71/convauto:latest
         env:
           CONV_NAME: ConvAuto
@@ -45,13 +39,7 @@ jobs:
         run: |
           echo "::set-output name=universal-apk::$(find -type f -iname '*-universal-*.apk' -print -quit)"
           echo "::set-output name=apk-commit::$(git -C ./Conversations rev-parse --short --verify HEAD)"
-          echo "::set-output name=apk-commit-msg::$(git -C ./Conversations log -1 --pretty='%B')"
-
-      - name: Get current date
-        id: current-date
-        run: |
-          echo "::set-output name=date-slug::$(date '+%m-%d-%Y')"
-          echo "::set-output name=date-long::$(date '+%B %d, %Y')"          
+          echo "::set-output name=apk-commit-msg::$(git -C ./Conversations log -1 --pretty='%B')"       
 
       - name: Create Release
         id: create_release
@@ -60,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: conv_${{ steps.apk-location.outputs.apk-commit }}
-          release_name: Conversations - ${{ steps.current-date.outputs.date-long }} [${{ steps.apk-location.outputs.apk-commit }}]
+          release_name: Conversations - ${{ steps.version.outputs.date-long }} [${{ steps.apk-location.outputs.apk-commit }}]
           body: ${{ steps.apk-location.outputs.apk-commit-msg }}
           draft: true
           prerelease: false
