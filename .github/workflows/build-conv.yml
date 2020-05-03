@@ -25,6 +25,13 @@ jobs:
           bash -c "echo $(git -C conv-commit-check rev-parse --short --verify HEAD)" > .github/CONVAUTO_COMMIT
           echo "::set-output name=date-long::$(date '+%B %d, %Y')"     
 
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Build Conv Auto
         uses: docker://tyler71/convauto:latest
         env:
