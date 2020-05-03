@@ -4,7 +4,9 @@ description: Unofficial debug versions
 ---
 **Unoffical debug versions**
 
+
 ## Latest
+![build apk](https://github.com/tyler71/conversations-build-site/workflows/build%20apk/badge.svg?event=repository_dispatch)  
 {{< release count=1 repo="tyler71/conversations-build-site"  >}}
 
 
