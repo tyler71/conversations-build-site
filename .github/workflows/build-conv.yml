@@ -40,6 +40,7 @@ jobs:
           CONV_NAME: ConvAuto
           CONV_ID: convauto
           CONV_VERSION: ${{ steps.version.outputs.conv-auto-version }}
+          GIT_FLAGS: "--depth=1"
         with:
           args: "master"
 
